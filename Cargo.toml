@@ -1,11 +1,11 @@
 [package]
 name = "pug"
 version = "0.2.1"
-authors = ["Arvid E. Picciani <aep@exys.org>"]
+authors = ["Arvid E. Picciani <aep@exys.org>", "undermouse <pythonisajoke@gmail.com"]
 edition = '2018'
 license = "MIT"
-description = "pug.js reimplemented in rust for speed"
-repository = "https://github.com/aep/pug-rs"
+description = "Faster Pug implemented in Rust"
+repository = "https://github.com/uwumouse/pug-rs"
 readme = "README.md"
 keywords = ["pug", "jade", "template"]
 categories = ["command-line-utilities", "parsing", "web-programming"]
@@ -16,6 +16,8 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 pest = "2.1"
 pest_derive = "2.1"
+clap = { version = "3.1.18", features = ["derive"] }
+colored = "2.0.0"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "0.2"
