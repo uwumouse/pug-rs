@@ -31,15 +31,15 @@ fn parse_file(config: &ParsingConfig) {
     let mut b: Vec<u8> = Vec::new();
     parse(contents).unwrap().to_html(&mut b).unwrap();
 
-    // let parsed = String::from_utf8(b).expect("Failed to convert parsed UTF-8 bytes to string");
+    let mut parent = path.parent().unwrap().to_path_buf();
 
     if let Some(out) = &config.out_dir {
-        // TODO
-        println!("{}", out);
-        return;
+        parent = PathBuf::from(out);
+        if !parent.is_dir() {
+            panic!("Output path should be directory");
+        }
     }
 
-    let parent = path.parent().unwrap().to_path_buf();
     let mut name = path
         .file_stem()
         .unwrap()
@@ -77,7 +77,7 @@ fn parse_file(config: &ParsingConfig) {
 
 fn main() {
     panic::set_hook(Box::new(|i| {
-        eprintln!("{:#?}", i);
+        // eprintln!("{:#?}", i);
         if let Some(m) = i.payload().downcast_ref::<&str>() {
             return eprintln!("{}: {}", "Error".red(), m);
         }
