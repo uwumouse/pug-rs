@@ -48,7 +48,7 @@ fn parse_file(config: &ParsingConfig) {
         .unwrap();
     name.push_str(".html");
 
-    let out = parent.join(name);
+    let out = fs::canonicalize(parent.join(name)).unwrap();
     let out = out.to_str().unwrap();
 
     let mut file = OpenOptions::new()
@@ -61,7 +61,7 @@ fn parse_file(config: &ParsingConfig) {
     file.write_all(&b)
         .expect(&format!("Failed write file: {}", &out));
 
-    println!("Compiled {}", out.green());
+    println!("{} {}", "Rendered".truecolor(187, 196, 189), out.green());
 }
 
 // fn parse_dir(dir_path: String) {
