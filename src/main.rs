@@ -2,8 +2,9 @@ use clap::Parser;
 use colored::Colorize;
 use pug::parse;
 use std::{
-    fs::{self, metadata, File, OpenOptions},
-    io::{self, ErrorKind, Read, Write},
+    ffi::OsStr,
+    fs::{self, metadata, OpenOptions},
+    io::{ErrorKind, Write},
     panic,
     path::PathBuf,
 };
@@ -24,9 +25,8 @@ struct ParsingConfig {
     out_dir: Option<String>,
 }
 
-// TODO: Read file
-fn parse_file(config: &ParsingConfig) {
-    let path = PathBuf::from(&config.input_path);
+fn parse_file(path: String, config: &ParsingConfig) {
+    let path = PathBuf::from(path);
     let contents = fs::read_to_string(&path).unwrap();
     let mut b: Vec<u8> = Vec::new();
     parse(contents).unwrap().to_html(&mut b).unwrap();
@@ -48,7 +48,7 @@ fn parse_file(config: &ParsingConfig) {
         .unwrap();
     name.push_str(".html");
 
-    let out = fs::canonicalize(parent.join(name)).unwrap();
+    let out = parent.join(name).canonicalize().unwrap();
     let out = out.to_str().unwrap();
 
     let mut file = OpenOptions::new()
@@ -64,20 +64,23 @@ fn parse_file(config: &ParsingConfig) {
     println!("{} {}", "Rendered".truecolor(187, 196, 189), out.green());
 }
 
-// fn parse_dir(dir_path: String) {
-//     if let Ok(paths) = fs::read_dir(dir_path) {
-//         for p in paths {
-//             println!("{}", p.unwrap().file_name().into_string().unwrap());
-//         }
-//         return;
-//     }
+fn parse_dir(config: &ParsingConfig) {
+    if let Ok(paths) = fs::read_dir(&config.input_path) {
+        for p in paths {
+            let p = p.unwrap().path();
+            if p.extension().and_then(OsStr::to_str).unwrap_or("") == "pug" {
+                parse_file(p.display().to_string(), config);
+            }
+        }
+        return;
+    }
 
-//     panic!("Unable to read derectory")
-// }
+    panic!("Unable to read derectory")
+}
 
 fn main() {
     panic::set_hook(Box::new(|i| {
-        // eprintln!("{:#?}", i);
+        eprintln!("{:#?}", i);
         if let Some(m) = i.payload().downcast_ref::<&str>() {
             return eprintln!("{}: {}", "Error".red(), m);
         }
@@ -90,9 +93,9 @@ fn main() {
     match metadata(&args.input_path) {
         Ok(meta) => {
             if meta.is_dir() {
-                // parse_dir(args.input_path);
+                parse_dir(&args);
             } else {
-                parse_file(&args);
+                parse_file(args.input_path.clone(), &args);
             }
         }
         Err(e) => match e.kind() {
