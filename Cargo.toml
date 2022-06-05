@@ -1,7 +1,7 @@
 [package]
 name = "pug"
 version = "0.2.1"
-authors = ["Arvid E. Picciani <aep@exys.org>", "undermouse <pythonisajoke@gmail.com"]
+authors = ["Arvid E. Picciani <aep@exys.org>", "undermouse <uundermouse@gmail.com>"]
 edition = '2018'
 license = "MIT"
 description = "Faster Pug implemented in Rust"
