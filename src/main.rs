@@ -48,8 +48,8 @@ fn render_file(path_str: String, config: &ParsingConfig) {
     path.set_extension("html");
 
     if let Some(out_dir) = &config.out_dir {
-        let out_dir_path = PathBuf::from(out_dir);
-        if out_dir_path.exists() && !out_dir_path.is_dir() {
+        let out_path = PathBuf::from(out_dir);
+        if out_path.exists() && !out_path.is_dir() {
             panic!("Output path should be directory");
         }
 
@@ -63,7 +63,7 @@ fn render_file(path_str: String, config: &ParsingConfig) {
             // input/file.html -> output/file.html
             let out_str = path.display().to_string().replace(
                 &input_dir.display().to_string(),
-                &out_dir_path.canonicalize().unwrap().display().to_string(),
+                &out_path.canonicalize().unwrap().display().to_string(),
             );
             path = PathBuf::from(out_str);
         }
