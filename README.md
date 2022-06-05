@@ -1,7 +1,7 @@
 # Pug.rs
-Forked to continue this project.
+A Rust program that reimplements Pug Template engine
 
-## What's added to the original project? 
+## Roadmap
 - [X] CLI params
 - [X] List of files (path to directory) instead of single file
 - [X] Watch files
@@ -19,15 +19,17 @@ Forked to continue this project.
     - [ ] `Each`
 - Mixins
   - [ ] Add attributes
-
-#### Maybe
-- [ ] Inline syntax for nested tags: `a: img` => `<a><img /></a>`
-- [ ] Exec JS code
-
-- [ ] Pretty print
+- Rust API to use in real projects
+- Ship NPM package to replace original pug (I hope someone will do this...)
 
 ## TODO
 > Just a short-term list of things I need to do
 - [ ] Write tests for existing functions
 - [ ] Investigate into how errors are being made
 - [ ] Create new system for error messages/warnings
+
+#### Maybe
+- [ ] Inline syntax for nested tags: `a: img` => `<a><img /></a>`
+- [ ] Exec JS code
+
+- [ ] Pretty print
